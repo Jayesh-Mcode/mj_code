@@ -1,0 +1,40 @@
+#!/bin/bash
+
+########################################################
+#     Script for updating Latest Terraform version     #
+#               and taking a back up..                 #
+########################################################
+
+#Installation directory
+INSTALL_DIR="${1:- /usr/bin/terraform }"
+
+#Fetching the terraform latest version
+VERSION="$(curl -sL "https://releases.hashicorp.com/terraform" | grep -v beta1 | grep -v alpha |grep -v beta2 | grep -v rc1 | grep -v rc2 | grep -Po "_(\d*\.?){3}" | sed 's/_//' | sort -V | tail -1)"
+ZIP_FILE="terraform_${VERSION}_linux_amd64.zip"
+
+URL="https://releases.hashicorp.com/terraform"
+
+echo "****** Downloading the latest stable release of Terraform******\n.\n."
+curl -s ${URL}/${VERSION}/terraform_${VERSION}_linux_amd64.zip -o ${INSTALL_DIR}/${ZIP_FILE}
+
+echo "****** Extracting the Zip file *********\n.\n."
+unzip -o ${INSTALL_DIR}/$ZIP_FILE -d $INSTALL_DIR && rm -v ${INSTALL_DIR}/$ZIP_FILE
+
+
+#Backup
+echo "****** Taking Backup ********
+tar -cvf /usr/bin/terraform_${VERSION}.tar /home
+echo "****** Backup completed **********"
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Loading complete
